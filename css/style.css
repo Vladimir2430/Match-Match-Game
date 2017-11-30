@@ -1,0 +1,42 @@
+body {
+	background: #b2d4e3;
+}
+.menu {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+}
+.fontMenu {
+	display: flex;
+	justify-content: flex-start;
+	background: rgba(79,75,19,0.69);
+	margin: 10px;
+	padding: 10px 10px;
+	color: #fb9c06;
+	font: bold 20px Bebas, sans-serif;
+	-webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    -border-radius: 4px;
+}
+.startButton {
+	display: flex;
+	justify-content: flex-start;
+	background: #fff;
+	margin: 10px;
+	padding: 10px 10px;
+	color: #fb9c06;
+	border: solid 5px rgba(79,75,19,0.69);
+	cursor: pointer;
+	font: bold 20px Bebas, sans-serif;
+	-webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    -border-radius: 4px;
+}
+.startButton:hover{
+    border: solid 5px #000033;
+}
+.textArea{
+    text-align: center;
+}
