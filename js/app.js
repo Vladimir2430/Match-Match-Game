@@ -1,121 +1,100 @@
+// Initializing button press
+const Buttons = document.querySelectorAll('#cardMenu, #difficultMenu, #gameMenu');
+for (let i = 0; i < 3; i++) {
+    Buttons[i].addEventListener('mousedown', (evt) => evt.currentTarget.classList.add('buttonPressed'));
+    Buttons[i].addEventListener('mouseleave', (evt) => evt.currentTarget.classList.remove('buttonPressed'));
+}
+
+// Initializing the cover map selection menu items
+document.querySelectorAll('#cardMenu>ul>li').forEach((el) => el.addEventListener('mousedown', (evt) =>
+    document.querySelectorAll('#gameMenu>ul>li')[0].innerHTML = evt.currentTarget.innerHTML)
+);
+
+// Initialize the game complexity selection menu items
+const gameMenuSelect = document.querySelectorAll('#gameMenu>ul>li')[1];
+document.querySelectorAll('#difficultMenu>ul>li').forEach((el) => el.addEventListener('mousedown', (evt) => {
+    gameMenuSelect.innerHTML = evt.currentTarget.innerHTML;
+    gameMenuSelect.attributes.difficult.value = evt.currentTarget.attributes.difficult.value;
+}));
+
+// Initialize the start of the game with the specified parameters
 const newTimer = {};
-let newGame;
-// Инициализация нажатия кнопок
-const gameButton = document.querySelectorAll('#cardMenu, #dificultMenu, #gameMenu');
-// Кнопка выбора обложки
-gameButton[0].addEventListener('click', (evt) => {
-    evt.currentTarget.classList.toggle('buttonPressed');
-});
-gameButton[0].addEventListener('mouseleave', (evt) => {
-    evt.currentTarget.classList.remove('buttonPressed');
-});
-// Кнопка выбора сложности
-gameButton[1].addEventListener('click', (evt) => {
-    evt.currentTarget.classList.toggle('buttonPressed');
-});
-gameButton[1].addEventListener('mouseleave', (evt) => {
-    evt.currentTarget.classList.remove('buttonPressed');
-});
-// Кнопка начала игры
-gameButton[2].addEventListener('click', (evt) => {
-    evt.currentTarget.classList.toggle('buttonPressed');
-});
-gameButton[2].addEventListener('mouseleave', (evt) => {
-    evt.currentTarget.classList.remove('buttonPressed');
-});
-// Инициализация пунктов меню выбора обложки карт 
-const cardMenuItems = Array.from(document.querySelectorAll('#cardMenu>ul>li'));
-cardMenuItems.map((el) => {
-    el.addEventListener('click', (evt) => {
-        document.querySelectorAll('#gameMenu>ul>li')[0].innerHTML = evt.currentTarget.innerHTML;
-    });
-});
-// Инициализация пунктов меню выбора сложности игры
-const dificultMenuItems = Array.from(document.querySelectorAll('#dificultMenu>ul>li'));
-dificultMenuItems.map((el) => {
-    el.addEventListener('click', (evt) => {
-        document.querySelectorAll('#gameMenu>ul>li')[1].innerHTML = evt.currentTarget.innerHTML;
-        document.querySelectorAll('#gameMenu>ul>li')[1].attributes.dificult.value = evt.currentTarget.attributes.dificult.value;
-    });
-});
-// Инициализация старта игры с указанными параметрами
-start.addEventListener('click', (evt) => {
-    const newGameDificult = evt.target.parentElement.children[1].attributes.dificult.value;
+start.addEventListener('mousedown', (evt) => {
+    const newGameDifficult = evt.target.parentElement.children[1].attributes.difficult.value;
     const newGameCard = evt.target.parentElement.children[0].children[0].attributes.src.value;
-    newGame = new Game(newGameCard, newGameDificult);
-    // Если таймер предыдущей игры не остановлен - убиваем его
+    newGame = new Game(newGameCard, newGameDifficult);
+    // If the timer of the previous game is not stopped - kill it
     if (newTimer.id) {
-        console.log('Clear previos timer');
+        console.log('Clear previous timer');
         clearInterval(newTimer.id);
     }
-    // Запускаем новый таймер
+    // Start a new timer
     newTimer.gameDuration = 0;
     newTimer.id = setInterval(newGame.changeTimer, 1000);
 });
 
 class Game {
-    constructor(sk, dif) {
+    constructor(sh, dif) {
         this.toWin = 0;
         this.pair = false;
         this.firstFlipped = null;
         this.secondFlipped = null;
-        this.scirt = sk;
-        this.dificult = dif;
-        this.tableWidth = this.dificult.split('_')[0];
-        this.tableHeight = this.dificult.split('_')[1];
+        this.shirt = sh;
+        this.difficult = dif;
+        this.tableWidth = this.difficult.split('_')[0];
+        this.tableHeight = this.difficult.split('_')[1];
         this.gameField = document.getElementsByClassName('gameField')[0];
         this.gameField.innerHTML = null;
 
-        // Делаем таймер видимым
+        // Making the timer visible
         timer.classList.add('timerVisible');
-        // Запускаем создание игрового поля
+        // Run the creation of the game board
         this.createTable();
     }
 
     createTable() {
         const table = document.createElement('table');
         table.setAttribute('cellspacing', 5);
-        const frontImage = `<div class="front" style="background-image: url('${this.scirt}')"></div>`;
+        const frontImage = `<div class="front" style="background-image: url('${this.shirt}')"></div>`;
         this.tableArray = [];
-        // Создаем строки
+        // Create lines
         const rows = [];
         for (let i = 0; i < this.tableHeight; i++) {
             rows[i] = table.insertRow(i);
-            // Создаем ячейки
+            // Create cells
             let cells = [];
             for (let j = 0; j < this.tableWidth; j++) {
                 cells[j] = rows[i].insertCell(j);
                 cells[j].innerHTML = frontImage;
-                cells[j].addEventListener('click', this.flipCard);
-                // Наполняем массив из всех ячеек
+                cells[j].addEventListener('mousedown', this.flipCard);
+                // Filling an array of all cells
                 this.tableArray.push(cells[j]);
             }
         }
         this.gameField.appendChild(table);
-        // Запускаем заполнение обратной стороны карт
+        // We start filling the back of the cards
         this.setBackImage();
     }
 
     flipCard(evt) {
-        // Если нет перевернутой пары карт
+        // If there is no inverted pair of cards
         if (newGame.pair == false && newGame.firstFlipped != evt.currentTarget) {
-            evt.currentTarget.classList.toggle('flipCard');
-            if (newGame.firstFlipped == null) {
-                newGame.firstFlipped = evt.currentTarget;
-            } else if (newGame.secondFlipped == null) {
+            evt.currentTarget.classList.add('flipCard');
+            if (newGame.firstFlipped == null) {newGame.firstFlipped = evt.currentTarget;
+            } else {
                 newGame.secondFlipped = evt.currentTarget;
-                // Запретить одновременно переворачивать все карты
+                // Do not turn all cards at the same time
                 newGame.pair = true;
-                // Новая пара карт
+                // New pair of cards
                 new cardPair(newGame.firstFlipped, newGame.secondFlipped);
-                // Очищаем текущие перевернуты карты
+                // Clear current inverted maps
                 newGame.firstFlipped = null;
                 newGame.secondFlipped = null;
             }
         }
     }
 
-    // Включая min не включая max, возвращает целое число
+    // Including min not including max, returns an integer
     getRandom(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
     }
@@ -123,7 +102,7 @@ class Game {
     setBackImage() {
         let count = 0;
         while (count < (this.tableHeight * this.tableWidth) / 2) {
-            // Для выбора из n картинок, вторым параметром передаем n+1
+            // To select from n pictures, we pass the second parameter n+1
             const backImage = `<div class="back" style="background-image: url('images/${this.getRandom(1, 13)}.gif')"></div>`;
             let firstCard;
             let secondCard;
@@ -148,7 +127,6 @@ class Game {
         (sec < 10) ? '0' + sec: sec;
         timer.innerHTML = ((min < 10) ? ('0' + min) : min) + ':' + ((sec < 10) ? ('0' + sec) : sec);
         newTimer.gameDuration++;
-
     }
 
     checkWin() {
@@ -159,66 +137,48 @@ class Game {
 
     congratulations() {
         console.log('your time is ' + timer.innerHTML);
-        // this.gameField.innerHTML = congr.innerHTML;
         timer.classList.remove('timerVisible');
-        clearInterval(newTimer.id);
-        newTimer.id = null;
         let gameMin = timer.innerHTML.split(':')[0];
         let gameSec = timer.innerHTML.split(':')[1];
-        this.gameField.innerHTML = `<div class="congr">
-            <h2 class="congrText">Congratulations.<br>You won in ${gameMin} minutes ${gameSec} seconds.</h2>
+        this.gameField.innerHTML = `<div class="congratulations">
+            <h2 class="congratulationsText">Congratulations.<br>You won in ${gameMin} minutes ${gameSec} seconds.</h2>
             </div>`;
         setTimeout(function() {
-            document.getElementsByClassName('congr')[0].classList.add('congrHidden');
+            document.getElementsByClassName('congratulations')[0].classList.add('congratulationsHidden');
         }, 10000);
-
-        // let congratulations = document.createElement('div');
     }
 }
 
 class cardPair {
-    constructor(fc, sc) {
-        this.firstCard = fc;
-        this.secondCard = sc;
-        this.firstCardValue = this.firstCard.children[1].attributes.style.value;
-        this.secondCardValue = this.secondCard.children[1].attributes.style.value;
+    constructor(firstCard, secondCard) {
+        this.firstCard = firstCard;
+        this.secondCard = secondCard;
         this.checkPair();
     }
 
     checkPair() {
-        if (this.firstCardValue == this.secondCardValue) {
-            // console.log('true');
-            setTimeout(() => {
-                this.hidden();
-            }, 1000);
-        } else {
-            // console.log('false');
-            setTimeout(() => {
-                this.flipBack();
-            }, 1500);
-        }
-
+        let firstCardValue = this.firstCard.children[1].attributes.style.value;
+        let secondCardValue = this.secondCard.children[1].attributes.style.value;
+        firstCardValue == secondCardValue ? setTimeout(() =>  this.hidden(), 1000) :  setTimeout(() => this.flipBack(), 1500);
     }
 
     hidden() {
-        this.firstCard.classList.toggle('hidenCard');
-        this.secondCard.classList.toggle('hidenCard');
+        this.firstCard.classList.toggle('hiddenCard');
+        this.secondCard.classList.toggle('hiddenCard');
         setTimeout(() => {
             this.firstCard.classList.toggle('invisibleCard');
             this.secondCard.classList.toggle('invisibleCard');
             newGame.toWin += 2;
             newGame.checkWin();
         }, 1000);
-        // Возвращаем возможность поворачивать новые карты
+        // We return the ability to rotate new maps
         newGame.pair = false;
     }
 
     flipBack() {
         this.firstCard.classList.toggle('flipCard');
         this.secondCard.classList.toggle('flipCard');
-        // Возвращаем возможность поворачивать новые карты
-        setTimeout(() => {
-            newGame.pair = false;
-        }, 1000);
+        // We return the ability to rotate new maps
+        setTimeout(() => newGame.pair = false, 1000);
     }
 }

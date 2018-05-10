@@ -133,7 +133,7 @@ ol>li {
     margin: 18px 10px;
 }
 
-.congr {
+.congratulations {
     border: 3px solid rgb(56, 108, 140);
     border-radius: 5px;
     margin: 150px auto;
@@ -143,11 +143,11 @@ ol>li {
     transition: opacity 5s linear;
 }
 
-.congrHidden {
+.congratulationsHidden {
     opacity: 0;
 }
 
-.congrText {
+.congratulationsText {
     color: white;
     font-size: 26px;
     font-weight: bold;
@@ -171,7 +171,7 @@ td {
     transform: rotate3d(0, 1, 0, 180deg);
 }
 
-.hidenCard {
+.hiddenCard {
     transform: rotate3d(0, 1, 0, 90deg);
 }
 
