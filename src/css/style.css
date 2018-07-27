@@ -72,13 +72,13 @@ nav>div>p{
     line-height: 0px;
 }
 
-nav>div>ul>li {
+nav>div>ul>li, .difficult>div, .start>div {
     margin: 5px auto;
     height: 60px;
     line-height: 60px;
 }
 
-nav>div>ul>li:hover {
+nav>div>ul>li:hover, .difficult>div:hover, .start>div:hover {
     background-color: rgb(63, 118, 153);
 }
 

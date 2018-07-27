@@ -1,0 +1,29 @@
+{
+  "name": "match-match-game",
+  "version": "1.0.0",
+  "description": "Uladzimir Yeudakimovich",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server"
+  },
+  "author": "Uladzimir Yeudakimovich",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "imagemin-webpack-plugin": "^2.1.5",
+    "style-loader": "^0.21.0",
+    "webpack-cli": "^2.1.4"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "nodemailer": "^4.6.5",
+    "webpack": "^4.8.3",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
